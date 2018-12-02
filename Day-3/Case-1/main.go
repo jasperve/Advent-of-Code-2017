@@ -48,15 +48,16 @@ func main() {
 			stepNumber = 0
 
 			if secondTime {
-				secondTime = false;	totalSteps++
+				secondTime = false;
+				totalSteps++
 			} else if !secondTime {
 				secondTime = true
 			}
 
 		}
 
-}
+	}
 
 	fmt.Printf( "Amount of steps needed: %v", math.Abs(float64(x)) + math.Abs(float64(y)))
 
-	}
+}
