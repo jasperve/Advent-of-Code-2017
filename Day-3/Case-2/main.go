@@ -2,33 +2,47 @@ package main
 
 import (
 	"fmt"
-	"math"
 )
 
-const highestNumber = 354765
+const searchedValue = 347991
 
 func main() {
 
-	x := 0
-	y := 0
+	gridSize := 20
+	grid := make([][]int, gridSize)
+
+	for i := 0; i < gridSize; i++ {
+		grid[i] = make([]int, gridSize)
+	}
+
+	x := gridSize / 2
+	y := gridSize / 2
 
 	totalSteps := 1
 	stepNumber := 0
 	direction := 90
 	secondTime := false
 
-	for iNumber:=1; iNumber < highestNumber; iNumber++ {
+	iNumber:=1
+
+	for {
+
+		grid[y][x] = iNumber
+
+		if iNumber > searchedValue {
+			break
+		}
 
 		if stepNumber < totalSteps {
 			switch direction {
 			case 90:
-				y += 1
-			case 180:
 				x += 1
+			case 180:
+				y += 1
 			case 270:
-				y -= 1
-			case 360:
 				x -= 1
+			case 360:
+				y -= 1
 			}
 			stepNumber++
 		}
@@ -53,11 +67,16 @@ func main() {
 			} else if !secondTime {
 				secondTime = true
 			}
-
 		}
+
+		iNumber = grid[y+1][x+1] + grid[y+1][x] + grid[y+1][x-1] + grid[y][x-1] + grid[y-1][x-1] + grid[y-1][x] + grid[y-1][x+1] + grid[y][x+1]
 
 	}
 
-	fmt.Printf( "Amount of steps needed: %v", math.Abs(float64(x)) + math.Abs(float64(y)))
+	for _, v := range grid {
+		fmt.Println(v)
+	}
+
+	fmt.Println("First higher value found: ", iNumber)
 
 }
