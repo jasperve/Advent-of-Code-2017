@@ -71,7 +71,6 @@ func main() {
 	}
 
 	topId := "aapssr"
-	//topId := "tknk"
 
 	for _, v := range programs {
 		if v.id == topId {
