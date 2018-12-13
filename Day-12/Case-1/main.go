@@ -10,15 +10,14 @@ import (
 
 )
 
-
 type program struct {
 	id int
-	pipes []program
+	pipes []*program
 }
 
 func main() {
 
-	programs := make(map[int]program)
+	programs := make(map[int]*program)
 	
 	file, _ := os.Open("input-test.txt")
 	input := bufio.NewScanner(file)
@@ -30,23 +29,28 @@ func main() {
 
 		id, _ := strconv.Atoi(line[0])
 
-		parent := program{}
+		var parent *program
 		if _, ok := programs[id]; ok {
 			parent = programs[id]
+			fmt.Println(parent.id)
 		} else {
+			parent = &program{}
 			parent.id = id
 			programs[id] = parent
 		}
 		
-		pipes := []program{}
+		fmt.Println("hier:", parent.id)
+
+		pipes := []*program{}
 		for _, v := range lineRight {
-			pipe_id, _ := strconv.Atoi(v)
-			if _, ok := programs[pipe_id]; ok {
-				pipes = append(pipes, programs[pipe_id])
+			pipeID, _ := strconv.Atoi(v)
+			if _, ok := programs[pipeID]; ok {
+				pipes = append(pipes, programs[pipeID])
 			} else {
-				pipe := program{ id: pipe_id }
+				pipe := &program{ id: pipeID }
 				pipes = append(pipes, pipe)
-				programs[pipe_id] = pipe
+				
+				programs[pipeID] = pipe
 			}
 		}
 
@@ -55,19 +59,22 @@ func main() {
 
 	}
 
-	allPipes := listPipes(programs[0])
+	allPipes := listPipes(programs[2])
+
+	fmt.Println(allPipes)
 
 }
 
 
-func listPipes(parent program) []*program {
+func listPipes(parent *program) []*program {
 
-	allPipes := []program{}
+	fmt.Println("Function called for ", parent.id)
 
+	allPipes := []*program{}
 	for _, pipe := range parent.pipes {
+		fmt.Println(pipe)
 		allPipes = listPipes(pipe)
-
-		fmt.Println(" - ", pipe.id)
 	}
+	return allPipes
 
 }
