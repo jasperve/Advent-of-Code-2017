@@ -15,7 +15,7 @@ func main() {
 	}
 
 	input, _ := ioutil.ReadFile("input.txt")
-	input = append(input, 3, 4, 1, 5, 17, 31, 73, 47, 23)
+	input = append(input, 17, 31, 73, 47, 23)
 
 	position := 0
 	skip := 0
@@ -41,7 +41,6 @@ func main() {
 
 	for i := 0; i < 16; i++ {
 		for ii := 0; ii < 16; ii++ {
-			fmt.Println(sparseHash[i*16+ii])
 			denseHash[i] = denseHash[i] ^ sparseHash[i*16+ii]
 		}
 	}
@@ -49,7 +48,5 @@ func main() {
 	for _, v := range denseHash {
 		fmt.Printf("%02x", v)
 	}
-
-	fmt.Println(denseHash)
 
 }
