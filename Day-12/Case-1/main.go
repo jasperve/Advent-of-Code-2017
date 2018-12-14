@@ -12,7 +12,8 @@ import (
 
 type program struct {
 	id int
-	pipes []*program
+	marked bool
+	children []*program
 }
 
 func main() {
@@ -29,52 +30,48 @@ func main() {
 
 		id, _ := strconv.Atoi(line[0])
 
-		var parent *program
+		parent := program{}
 		if _, ok := programs[id]; ok {
-			parent = programs[id]
-			fmt.Println(parent.id)
+			parent = *programs[id]
 		} else {
-			parent = &program{}
 			parent.id = id
-			programs[id] = parent
+			programs[id] = &parent
 		}
 		
-		fmt.Println("hier:", parent.id)
-
-		pipes := []*program{}
+		children := []*program{}
 		for _, v := range lineRight {
-			pipeID, _ := strconv.Atoi(v)
-			if _, ok := programs[pipeID]; ok {
-				pipes = append(pipes, programs[pipeID])
+			childID, _ := strconv.Atoi(v)
+			if _, ok := programs[childID]; ok {
+				children = append(children, programs[childID])
 			} else {
-				pipe := &program{ id: pipeID }
-				pipes = append(pipes, pipe)
-				
-				programs[pipeID] = pipe
+				child := program{ id: childID }
+				children = append(children, &child)
+				programs[childID] = &child
 			}
 		}
 
-		parent.pipes = pipes
-		programs[id] = parent
+		parent.children = children
+		programs[id] = &parent
 
 	}
 
-	allPipes := listPipes(programs[2])
+	markPrograms(programs[3])
 
-	fmt.Println(allPipes)
-
+	for i := 0; i < len(programs); i++ {
+		fmt.Println(programs[i].id, programs[i].marked, programs[i].children)
+	}
+	
 }
 
 
-func listPipes(parent *program) []*program {
+func markPrograms(parent *program) {
 
-	fmt.Println("Function called for ", parent.id)
-
-	allPipes := []*program{}
-	for _, pipe := range parent.pipes {
-		fmt.Println(pipe)
-		allPipes = listPipes(pipe)
+	fmt.Println("Markprograms called for ", parent.id)
+	parent.marked = true
+	for i := 0; i < len(parent.children); i++ {
+		if parent.children[i].marked == false {
+			markPrograms(parent.children[i])
+		}
 	}
-	return allPipes
 
 }
