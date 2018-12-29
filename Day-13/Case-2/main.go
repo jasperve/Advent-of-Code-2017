@@ -19,11 +19,14 @@ type layer struct {
 	scope int
 }
 
-var layers map[int]*layer
+type forbiddenScope struct {
+	base int
+	addition int
+}
 
 func main() {
 
-	layers = make(map[int]*layer)
+	layers := make(map[int]*layer)
 	maxPosition := 0
 
 	file, _ := os.Open("input.txt")
@@ -41,58 +44,26 @@ func main() {
 		
 	}
 
+	forbiddenScopes := []forbiddenScope{}
+
+	for i, l := range layers {
+		forbiddenScopes = append(forbiddenScopes, forbiddenScope{ base: (l.scope-1)*2-i, addition: (l.scope-1)*2 })
+	}
+
 	delay := 0
 
-	for {
+	OUTER:
+	for  {
 
-		resetLayers()
-		for d := 0; d < delay; d++ {
-			moveLayers()
-		}
-		
-		detected := false
-
-		for p := 0; p <= maxPosition; p++ {
-
-			if l, ok := layers[p]; ok && l.position == 1 {
-				detected = true
+		for s := 0; s < len(forbiddenScopes); s++ {
+			if delay == forbiddenScopes[s].base || (delay-forbiddenScopes[s].base)%forbiddenScopes[s].addition == 0 { 
+				delay++
+				continue OUTER 
 			}
-			moveLayers()
-
 		}
+			
+		fmt.Println("result:", delay)
+		break
 
-		if !detected {
-			break
-		}
-		delay++
-
-	}
-
-	fmt.Println("We can pass through without being detected with a delay of", delay)
-
-}
-
-
-func resetLayers() {
-	for _, l := range layers {
-		l.position = 1
-		l.direction = down
-	}
-}
-
-
-func moveLayers() {
-	for _, l := range layers {
-		if l.position == 1 && l.direction == up {
-			l.direction = down
-			l.position++
-		} else if l.position == l.scope && l.direction == down {
-			l.direction = up
-			l.position--
-		} else if l.direction == down {
-			l.position++
-		} else if l.direction == up {
-			l.position--
-		}
 	}
 }
