@@ -13,14 +13,14 @@ import (
 type program struct {
 	id int
 	marked bool
-	children []*program
+	connections []*program
 }
 
 func main() {
 
 	programs := make(map[int]*program)
 	
-	file, _ := os.Open("input-test.txt")
+	file, _ := os.Open("input.txt")
 	input := bufio.NewScanner(file)
 
 	for input.Scan() {
@@ -30,47 +30,48 @@ func main() {
 
 		id, _ := strconv.Atoi(line[0])
 
-		parent := program{}
-		if _, ok := programs[id]; ok {
-			parent = *programs[id]
-		} else {
-			parent.id = id
-			programs[id] = &parent
-		}
+        parent, ok := programs[id]
+        if !ok {
+            parent = &program{id: id}
+            programs[id] = parent
+        }
 		
-		children := []*program{}
+		connections := []*program{}
 		for _, v := range lineRight {
-			childID, _ := strconv.Atoi(v)
-			if _, ok := programs[childID]; ok {
-				children = append(children, programs[childID])
+			connectionID, _ := strconv.Atoi(v)
+			if _, ok := programs[connectionID]; ok {
+				connections = append(connections, programs[connectionID])
 			} else {
-				child := program{ id: childID }
-				children = append(children, &child)
-				programs[childID] = &child
+				connection := &program{ id: connectionID }
+				connections = append(connections, connection)
+				programs[connectionID] = connection
 			}
 		}
 
-		parent.children = children
-		programs[id] = &parent
+		parent.connections = connections
 
 	}
 
-	markPrograms(programs[3])
+	markPrograms(programs[0])
 
+	counter := 0
 	for i := 0; i < len(programs); i++ {
-		fmt.Println(programs[i].id, programs[i].marked, programs[i].children)
+		if programs[i].marked {
+			counter++
+		}
+		fmt.Println(programs[i].id, programs[i].marked, programs[i].connections)
 	}
-	
+
+	fmt.Println(counter)
+
 }
 
 
 func markPrograms(parent *program) {
-
-	fmt.Println("Markprograms called for ", parent.id)
 	parent.marked = true
-	for i := 0; i < len(parent.children); i++ {
-		if parent.children[i].marked == false {
-			markPrograms(parent.children[i])
+	for i := 0; i < len(parent.connections); i++ {
+		if parent.connections[i].marked == false {
+			markPrograms(parent.connections[i])
 		}
 	}
 
