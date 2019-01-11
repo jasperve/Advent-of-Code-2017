@@ -6,49 +6,21 @@ func main() {
 
 	reg := map[string]int{	"b": 109900, "c": 126900 }
 
-	OUTER:
-	for {
-
-		reg["f"] = 1
+	for reg["b"] != reg["c"] {
 		reg["d"] = 2
-
-		DLOOP: 
-		for {
-
+		for reg["d"] != reg["b"] {
 			reg["e"] = 2
-
-			ELOOP:
-			for {
-	
+			for reg["e"] != reg["b"] {
 				if reg["d"] * reg["e"] == reg["b"] {
-					reg["f"] = 0
-					break DLOOP
+					reg["h"]++			// NUMBER IS NOT A PRIME
+					reg["e"] = reg["b"] - 1 // QUICK WAY TO EXIT LOOP FOR THIS NUMBER
+					reg["d"] = reg["b"] - 1 // QUICK WAY TO EXIT LOOP FOR THIS NUMBER
 				}
-
 				reg["e"]++
-				if reg["e"] == reg["b"] {
-					break ELOOP
-				}
-
 			}
-
 			reg["d"]++
-			if reg["d"] == reg["b"] {
-				break DLOOP
-			}
-
 		}
-
-		if reg["f"] == 0 {
-			reg["h"]++
-		}
-
-		if reg["b"] - reg["c"] == 0 {
-			break OUTER
-		}
-
 		reg["b"] += 17
- 
 	}
 
 	fmt.Println(reg["h"])
