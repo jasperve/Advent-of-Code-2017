@@ -8,11 +8,8 @@ func main() {
 
 	reg["c"] = 110274
 
-	numberLoops := 0
-
 	OUTER:
 	for {
-		numberLoops++
 
 		reg["f"] = 1
 		reg["d"] = 2
@@ -44,8 +41,6 @@ func main() {
 
 		}
 
-		fmt.Println(reg["b"], reg["h"])
-
 		if reg["f"] == 0 {
 			reg["h"]++
 		}
@@ -59,6 +54,6 @@ func main() {
 	}
 
 	fmt.Println(reg["h"])
-	
+
 }
 
