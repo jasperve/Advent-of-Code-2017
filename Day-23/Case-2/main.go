@@ -6,8 +6,6 @@ func main() {
 
 	reg := map[string]int{	"b": 109900, "c": 126900 }
 
-	reg["c"] = 110274
-
 	OUTER:
 	for {
 
@@ -28,14 +26,14 @@ func main() {
 				}
 
 				reg["e"]++
-				if reg["e"] - reg["b"] == 0 {
+				if reg["e"] == reg["b"] {
 					break ELOOP
 				}
 
 			}
 
 			reg["d"]++
-			if reg["d"] - reg["b"] == 0 {
+			if reg["d"] == reg["b"] {
 				break DLOOP
 			}
 
