@@ -1,0 +1,32 @@
+set b 99                reg[b] = 99
+set c b                 reg[c] = reg[b]
+jnz a 2                 if reg[a] != 0          -> skip next line
+jnz 1 5                                         -> skip next 4 lines
+mul b 100               reg[b] *= 100           -> only reachable from line 3
+sub b -100000           reg[b] += 100000
+set c b                 reg[c] = reg[b]
+sub c -17000            reg[c] += 17000
+set f 1                 reg[f] = 1
+set d 2                 reg[d] = 2
+set e 2                 reg[e] = 2
+set g d                 reg[g] = reg[d]
+mul g e                 reg[g] *= reg[e]
+sub g b                 reg[g] -= reg[b]
+jnz g 2                 if reg[g] != 0          -> skip next line 
+set f 0                 reg[f] = 0
+sub e -1                reg[e]++
+set g e                 reg[g] = reg[e]
+sub g b                 reg[g] -= reg[b]
+jnz g -8                if reg[g] != 0          -> go back 8 lines
+sub d -1                reg[d]++
+set g d                 reg[g] = reg[d]
+sub g b                 reg[g] -= reg[b]
+jnz g -13               if reg[g] != 0          -> go back 12 lines
+jnz f 2                 if reg[f] != 0          -> skip next lines  
+sub h -1                reg[h]++ 
+set g b                 reg[g] = reg[b]
+sub g c                 reg[g] -= reg[c]
+jnz g 2                 if reg[g] != 0          -> skip next line
+jnz 1 3                                         -> EXIT PROGRAM
+sub b -17               reg[b] += 17
+jnz 1 -23                                       -> go back 23 lines    
